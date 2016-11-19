@@ -1,0 +1,20 @@
+package com.oa.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.oa.service.impl.SubjectService;
+
+@Controller
+public class ExamController {
+	
+	@Autowired
+	private SubjectService subjectService;
+	
+	@RequestMapping("")
+	public String toSubjectManage() {
+		return null;
+	}
+	
+}

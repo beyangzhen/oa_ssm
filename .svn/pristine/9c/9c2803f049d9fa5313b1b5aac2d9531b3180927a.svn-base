@@ -1,0 +1,51 @@
+package com.oa.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.oa.domain.Subject;
+import com.oa.domain.Title;
+import com.oa.mapper.SubjectMapper;
+import com.oa.service.ISubjectService;
+
+@Service
+public class SubjectService implements ISubjectService {
+	
+	@Autowired
+	private SubjectMapper subjectMapper;
+
+	@Override
+	public void addSubject(Subject subject, Title title) {
+		subjectMapper.addTitle(title);
+		subjectMapper.addSubject(subject);
+	}
+
+	@Override
+	public void deleteSubjectById(int id) {
+		subjectMapper.deleteSubjectById(id);
+		subjectMapper.deleteTitleById(id);
+	}
+
+	@Override
+	public void updateSubject(Subject subject, Title title) {
+		subjectMapper.updateTitle(title);
+		subjectMapper.updateSubject(subject);
+	}
+
+	@Override
+	public Subject findSubjectById(int id) {
+		Subject subject = subjectMapper.findSubjectById(id);
+		return subject;
+	}
+
+	@Override
+	public List<Subject> findAllSubject() {
+		List<Subject> subjectList = subjectMapper.findAllSubject();
+		return subjectList;
+	}
+	
+	
+	
+}

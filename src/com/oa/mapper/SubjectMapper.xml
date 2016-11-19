@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.oa.mapper.SubjectMapper">
+
+	<insert id="addTitle" parameterType="Title" keyProperty="id" useGeneratedKeys="true">
+		insert into tb_title(question, optionA, optionB, optionC, optionD) values(#{question}, #{optionA}, #{optionB}, #{optionC}, #{optionD})
+	</insert>
+	
+	<delete id="deleteTitleById" parameterType="int">
+		delete from tb_title where id=#{id}
+	</delete>
+	
+	<update id="updateTitle" parameterType="Title">
+		update tb_title set question=#{question}, optionA=#{optionA}, optionB=#{optionB}, optionC=#{optionC}, optionD=#{optionD} where id=#{id}
+	</update>
+
+	<!-- 插入属性为对象 -->
+	<!-- 所有#{}获取的值，都是函数传进来的 "参数对象" 中的属性值 -->
+	<insert id="addSubject" parameterType="Subject" keyProperty="id" useGeneratedKeys="true">
+		insert into tb_subject(tId, type, content, answer) values( #{title.id, javaType=int, jdbcType=INTEGER}, #{type}, #{content}, #{answer})
+	</insert>
+	
+	<delete id="deleteSubjectById" parameterType="int">
+		delete from tb_subject where id=#{id}
+	</delete>
+	
+	<update id="updateSubject" parameterType="Subject">
+		update tb_subject set tId=#{title.id}, type=#{type, javaType=string, jdbcType=VARCHAR}, content=#{content}, answer=#{answer} where id=#{id}
+	</update>
+	
+	<select id="findSubjectById" parameterType="int" resultMap="subjectResultMap">
+		SELECT
+			s.id,
+			t.question,
+			t.optionA,
+			t.optionB,
+			t.optionC,
+			t.optionD,
+			s.type,
+			s.content,
+			s.answer
+		from tb_subject s, tb_title t
+		where t.id = s.tId 
+		and s.id = #{id}
+	</select>
+	
+	<select id="findAllSubject" resultMap="subjectResultMap">
+		SELECT
+			s.id,
+			t.question,
+			t.optionA,
+			t.optionB,
+			t.optionC,
+			t.optionD,
+			s.type,
+			s.content,
+			s.answer
+		from tb_subject s, tb_title t
+		where t.id = s.tId 
+	</select>
+	
+	<!-- 共用的结果集 -->
+	<resultMap type="Subject" id="subjectResultMap">
+		<!-- property:类属性 ；column:表字段。此时名称一致也需要写上result标签-->
+		<id property="id" column="id"/>
+		<result property="type" column="type"/>
+		<result property="content" column="content"/>
+		<result property="answer" column="answer"/>
+		<association property="title" javaType="Title">
+			<!-- 配置的就是关联对象的属性和表的映射  -->
+			<id property="id" column="id"/>
+			<result property="question" column="question"/>
+			<result property="optionA" column="optionA"/>
+			<result property="optionB" column="optionB"/>
+			<result property="optionC" column="optionC"/>
+			<result property="optionD" column="optionD"/>
+		</association>
+	</resultMap>
+	
+</mapper>
